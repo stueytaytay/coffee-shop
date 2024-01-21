@@ -16,6 +16,8 @@ class CoffeeTypes extends Component
 
     public $successMessage = '';
 
+    public $changesMade = false;
+
     public function mount()
     {
         // Load CoffeeTypes, but convert profit_margin to percentage for display
@@ -39,6 +41,8 @@ class CoffeeTypes extends Component
         $this->coffeeTypes[] = ['coffee_name' => '', 'profit_margin' => '', 'shipping_partner_id' => null];
 
         $this->successMessage = '';
+
+        $this->changesMade = true;
     }
 
     public function saveCoffeeTypes()
@@ -77,6 +81,8 @@ class CoffeeTypes extends Component
         }
 
         $this->successMessage = 'Coffee types saved successfully!';
+
+        $this->changesMade = false;
     }
 
     public function deleteCoffeeType($index)
@@ -92,6 +98,11 @@ class CoffeeTypes extends Component
         // Remove it from the array
         unset($this->coffeeTypes[$index]);
         $this->coffeeTypes = array_values($this->coffeeTypes);
+    }
+
+    public function updated()
+    {
+        $this->changesMade = true;
     }
 
     public function render()

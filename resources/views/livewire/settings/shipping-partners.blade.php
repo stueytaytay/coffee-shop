@@ -12,12 +12,12 @@
                     <div class="flex justify-center items-start gap-6 pb-6" wire:loading.class="opacity-50">
                         <div class="w-52">
                             <label for="partner_name_{{ $index }}" class="block font-semibold text-sm pb-1">Partner Name</label>
-                            <x-input type="text" id="partner_name_{{ $index }}" wire:model="shippingPartners.{{ $index }}.partner_name" class="w-full" />
+                            <x-input type="text" id="partner_name_{{ $index }}" wire:model.live="shippingPartners.{{ $index }}.partner_name" class="w-full" />
                             <x-input-error field="shippingPartners.{{ $index }}.partner_name" />
                         </div>
                         <div class="w-52">
                             <label for="shipping_cost_{{ $index }}" class="block font-semibold text-sm pb-1">Shipping Cost</label>
-                            <x-input type="text" id="shipping_cost_{{ $index }}" wire:model="shippingPartners.{{ $index }}.shipping_cost" class="w-full" />
+                            <x-input type="text" id="shipping_cost_{{ $index }}" wire:model.live="shippingPartners.{{ $index }}.shipping_cost" class="w-full" />
                             <x-input-error field="shippingPartners.{{ $index }}.shipping_cost" />
                         </div>
                         <button
@@ -38,3 +38,30 @@
         </div>
     </div>
 </div>
+
+@script
+    <script>
+        window.addEventListener('livewire:initialized', function () {
+            const component = @this;
+
+            function confirmLeave(e) {
+                if (component.get('changesMade')) {
+                    (e || window.event).returnValue = true;
+                }
+            }
+
+            window.addEventListener('beforeunload', confirmLeave);
+
+            // Listen for changes in Livewire component
+            component.on('updated', function () {
+                component.set('changesMade', true);
+                console.log('t');
+            });
+
+            // Reset flag after successful save
+            component.on('saved', function () {
+                component.set('changesMade', false);
+            });
+        });
+    </script>
+@endscript

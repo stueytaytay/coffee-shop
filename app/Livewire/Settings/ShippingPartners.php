@@ -11,6 +11,8 @@ class ShippingPartners extends Component
 
     public $successMessage = '';
 
+    public $changesMade = false;
+
     public function mount()
     {
         $this->shippingPartners = ShippingPartner::all()->toArray();
@@ -21,6 +23,8 @@ class ShippingPartners extends Component
         $this->shippingPartners[] = ['partner_name' => '', 'shipping_cost' => ''];
 
         $this->successMessage = '';
+
+        $this->changesMade = true;
     }
 
     public function saveShippingPartners()
@@ -49,6 +53,8 @@ class ShippingPartners extends Component
         }
 
         $this->successMessage = 'Shipping partners saved successfully!';
+
+        $this->changesMade = false;
     }
 
     public function deleteShippingPartner($index)
@@ -64,6 +70,11 @@ class ShippingPartners extends Component
         // Remove it from the array
         unset($this->shippingPartners[$index]);
         $this->shippingPartners = array_values($this->shippingPartners);
+    }
+
+    public function updated()
+    {
+        $this->changesMade = true;
     }
 
     public function render()
