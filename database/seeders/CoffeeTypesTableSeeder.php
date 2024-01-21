@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
+use Carbon\Carbon;
+use Faker\Generator as Faker;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Faker\Generator as Faker;
-use Carbon\Carbon;
 
 class CoffeeTypesTableSeeder extends Seeder
 {
@@ -34,7 +34,7 @@ class CoffeeTypesTableSeeder extends Seeder
                 'profit_margin' => $bean[1] / 100, // Convert percentage to decimal
                 'shipping_partner_id' => $randomShippingPartnerId,
                 'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now()
+                'updated_at' => Carbon::now(),
             ]);
         }
     }

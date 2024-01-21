@@ -2,12 +2,13 @@
 
 namespace App\Livewire\Settings;
 
-use Livewire\Component;
 use App\Models\ShippingPartner;
+use Livewire\Component;
 
 class ShippingPartners extends Component
 {
     public $shippingPartners = [];
+
     public $successMessage = '';
 
     public function mount()
@@ -23,12 +24,12 @@ class ShippingPartners extends Component
     }
 
     public function saveShippingPartners()
-    {        
+    {
         // Build validation rules - make sure partner names are unique
         $rules = [];
         foreach ($this->shippingPartners as $index => $partner) {
-            $uniqueRule = isset($partner['id']) 
-                ? "unique:shipping_partners,partner_name,{$partner['id']}" 
+            $uniqueRule = isset($partner['id'])
+                ? "unique:shipping_partners,partner_name,{$partner['id']}"
                 : 'unique:shipping_partners,partner_name';
 
             $rules["shippingPartners.$index.partner_name"] = "required|string|min:1|$uniqueRule";

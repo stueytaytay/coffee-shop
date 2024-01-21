@@ -2,10 +2,10 @@
 
 namespace Tests\Feature;
 
-use Livewire\Livewire;
-use Tests\TestCase;
 use App\Livewire\Sales\NewSales;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Livewire\Livewire;
+use Tests\TestCase;
 
 class NewSalesTest extends TestCase
 {
@@ -81,7 +81,7 @@ class NewSalesTest extends TestCase
             ->set('unit_cost', $unitCost)
             ->set('selectedCoffeeType', $coffeeType->id)
             ->call('calculateSellingPrice')
-            ->assertSee((string)$expectedSellingPrice);
+            ->assertSee((string) $expectedSellingPrice);
     }
 
     // Helper method to calculate the expected selling price

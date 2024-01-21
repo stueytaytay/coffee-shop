@@ -2,12 +2,12 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use Livewire\Livewire;
+use App\Livewire\Settings\CoffeeTypes;
 use App\Models\CoffeeType;
 use App\Models\ShippingPartner;
-use App\Livewire\Settings\CoffeeTypes;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Livewire\Livewire;
+use Tests\TestCase;
 
 class CoffeeTypesTest extends TestCase
 {
@@ -74,5 +74,4 @@ class CoffeeTypesTest extends TestCase
             ->call('deleteCoffeeType', 0)
             ->assertDontSee('Latte');
     }
-
 }

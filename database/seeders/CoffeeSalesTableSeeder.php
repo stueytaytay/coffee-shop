@@ -2,13 +2,14 @@
 
 namespace Database\Seeders;
 
+use Faker\Generator as Faker;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Faker\Generator as Faker;
 
 class CoffeeSalesTableSeeder extends Seeder
 {
     private $profitMargin = 0.25;
+
     private $shippingCost = 10.00;
 
     /**
@@ -43,7 +44,7 @@ class CoffeeSalesTableSeeder extends Seeder
                 'selling_price' => $sellingPrice,
                 'coffee_type_id' => $randomCoffeeTypeId,
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
             ]);
         }
     }

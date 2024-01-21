@@ -2,19 +2,24 @@
 
 namespace App\Livewire\Sales;
 
-use Livewire\Component;
-use Livewire\Attributes\Validate;
 use Akaunting\Money\Money;
 use App\Models\CoffeeSale;
 use App\Models\CoffeeType;
+use Livewire\Attributes\Validate;
+use Livewire\Component;
 
 class NewSales extends Component
 {
     public $profitMargin;
+
     public $shippingCost;
+
     public $cost;
+
     public $selling_price;
+
     public $formattedSellingPrice = '-';
+
     public $coffeeTypes = [];
 
     #[Validate('required|exists:coffee_types,id')]
@@ -22,7 +27,7 @@ class NewSales extends Component
 
     #[Validate('required|integer|min:1')]
     public $quantity = '';
- 
+
     #[Validate('required|numeric|min:0.01')]
     public $unit_cost = '';
 
@@ -34,7 +39,7 @@ class NewSales extends Component
     public function updated($propertyName)
     {
         $this->validateOnly($propertyName);
-        if (!$this->getErrorBag()->has($propertyName)) {
+        if (! $this->getErrorBag()->has($propertyName)) {
             $this->calculateSellingPrice();
         }
     }
@@ -75,8 +80,9 @@ class NewSales extends Component
 
         // Check if the selected coffee type has a valid shipping partner
         $coffeeType = CoffeeType::with('shippingPartner')->find($this->selectedCoffeeType);
-        if (!$coffeeType || !$coffeeType->shippingPartner) {
+        if (! $coffeeType || ! $coffeeType->shippingPartner) {
             $this->addError('selectedCoffeeType', 'The shipping partner for the selected coffee type is not available.');
+
             return; // Prevent further execution
         }
 
@@ -97,7 +103,6 @@ class NewSales extends Component
         // Reset the form values
         $this->reset(['quantity', 'unit_cost', 'selectedCoffeeType', 'profitMargin', 'shippingCost', 'formattedSellingPrice']);
     }
-
 
     public function render()
     {

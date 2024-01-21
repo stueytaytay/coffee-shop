@@ -2,15 +2,18 @@
 
 namespace App\Livewire\Settings;
 
-use Livewire\Component;
 use App\Models\CoffeeType;
 use App\Models\ShippingPartner;
+use Livewire\Component;
 
 class CoffeeTypes extends Component
 {
     public $coffeeTypes = [];
+
     public $shippingPartners = [];
+
     public $selectedShippingPartner = [];
+
     public $successMessage = '';
 
     public function mount()
@@ -18,6 +21,7 @@ class CoffeeTypes extends Component
         // Load CoffeeTypes, but convert profit_margin to percentage for display
         $this->coffeeTypes = CoffeeType::all()->map(function ($type) {
             $type->profit_margin *= 100;
+
             return $type;
         })->toArray();
 
@@ -38,12 +42,12 @@ class CoffeeTypes extends Component
     }
 
     public function saveCoffeeTypes()
-    {        
+    {
         // Build validation rules - make sure coffee names are unique
         $rules = [];
         foreach ($this->coffeeTypes as $index => $type) {
-            $uniqueRule = isset($type['id']) 
-                ? "unique:coffee_types,coffee_name,{$type['id']}" 
+            $uniqueRule = isset($type['id'])
+                ? "unique:coffee_types,coffee_name,{$type['id']}"
                 : 'unique:coffee_types,coffee_name';
 
             $rules["coffeeTypes.$index.coffee_name"] = "required|string|min:1|$uniqueRule";

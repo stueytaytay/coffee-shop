@@ -2,10 +2,10 @@
 
 namespace Tests\Feature;
 
-use Livewire\Livewire;
-use Tests\TestCase;
 use App\Livewire\Sales\PreviousSales;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Livewire\Livewire;
+use Tests\TestCase;
 
 class PreviousSalesTest extends TestCase
 {

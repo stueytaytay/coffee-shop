@@ -2,15 +2,15 @@
 
 namespace App\Livewire\Sales;
 
-use Livewire\Component;
 use App\Models\CoffeeSale;
+use Livewire\Component;
 
 class PreviousSales extends Component
 {
     public $coffeeSales;
 
     protected $listeners = [
-        'saleRecorded' => 'refreshSales'
+        'saleRecorded' => 'refreshSales',
     ];
 
     public function mount()
