@@ -40,6 +40,14 @@
                         </tr>
                     @endforeach
                 </tbody>
+                <tfoot class="bg-gray-100">
+                    <tr>
+                        <td colspan="7" class="px-6 py-3 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Total Selling Price</td>
+                        <td class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            {{ Akaunting\Money\Money::GBP($totalSellingPrice * 100)->format() }}
+                        </td>
+                    </tr>
+                </tfoot>
             </table>
             @if($coffeeSales->count() >= $perPage)
                 <div class="text-center py-4">

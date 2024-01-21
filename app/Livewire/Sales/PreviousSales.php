@@ -13,6 +13,8 @@ class PreviousSales extends Component
 
     public $currentPage = 1;
 
+    public $totalSellingPrice = 0;
+
     protected $listeners = [
         'saleRecorded' => 'refreshSales',
     ];
@@ -33,6 +35,8 @@ class PreviousSales extends Component
             ->orderBy('created_at', 'desc')
             ->take($this->perPage * $this->currentPage) // Fetch items for the current page
             ->get();
+
+        $this->calculateTotalSellingPrice();
     }
 
     public function loadMore()
@@ -57,6 +61,11 @@ class PreviousSales extends Component
             
             $this->loadSales(); 
         }
+    }
+
+    private function calculateTotalSellingPrice()
+    {
+        $this->totalSellingPrice = $this->coffeeSales->sum('selling_price');
     }
 
     public function render()
