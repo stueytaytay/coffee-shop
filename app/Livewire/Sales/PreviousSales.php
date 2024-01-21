@@ -15,16 +15,21 @@ class PreviousSales extends Component
 
     public function mount()
     {
-        $this->coffeeSales = CoffeeSale::with(['coffeeType', 'coffeeType.shippingPartner' => function ($query) {
-            $query->withTrashed();
+        $this->coffeeSales = CoffeeSale::with(['coffeeType' => function ($query) {
+            $query->withTrashed(); // Include soft-deleted CoffeeTypes
+        }, 'coffeeType.shippingPartner' => function ($query) {
+            $query->withTrashed(); // Include soft-deleted ShippingPartners
         }])->orderBy('created_at', 'desc')->get();
+        
     }
 
     public function refreshSales()
     {
-        $this->coffeeSales = CoffeeSale::with(['coffeeType', 'coffeeType.shippingPartner' => function ($query) {
-            $query->withTrashed();
-        }])->orderBy('created_at', 'desc')->get();
+        $this->coffeeSales = CoffeeSale::with(['coffeeType' => function ($query) {
+            $query->withTrashed(); // Include soft-deleted CoffeeTypes
+        }, 'coffeeType.shippingPartner' => function ($query) {
+            $query->withTrashed(); // Include soft-deleted ShippingPartners
+        }])->orderBy('created_at', 'desc')->get();        
 
         $this->dispatch('refreshComponent');
     }
