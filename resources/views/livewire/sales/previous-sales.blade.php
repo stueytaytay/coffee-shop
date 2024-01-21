@@ -5,6 +5,7 @@
                 <thead class="bg-gray-50">
                     <tr>
                         <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                        <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Coffee Type</th>
                         <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
                         <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Unit Cost</th>
                         <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Selling Price</th>
@@ -16,12 +17,18 @@
                     @foreach ($coffeeSales as $sale)
                         <tr class="@if($loop->odd) bg-white @else bg-gray-50 @endif">
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-center">{{ $sale->id }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm {{ $sale->coffeeType->trashed() ? 'text-gray-300' : 'text-gray-500' }} text-center">{{ $sale->coffeeType->coffee_name }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">{{ $sale->quantity }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">{{ Akaunting\Money\Money::GBP($sale->unit_cost * 100)->format() }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">{{ Akaunting\Money\Money::GBP($sale->selling_price * 100)->format() }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">{{ $sale->created_at->format('d/m/Y H:i:s') }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                                <button wire:click="deleteSale({{ $sale->id }})" class="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 font-medium rounded-full text-xs px-3 py-1 text-center inline-flex items-center">
+                                <button
+                                    type="button"
+                                    wire:click="deleteSale({{ $sale->id }})"
+                                    wire:confirm="Are you sure you want to delete this sale?"
+                                    class="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 font-medium rounded-full text-xs px-3 py-1 text-center inline-flex items-center"
+                                >
                                     Delete
                                 </button>
                             </td>

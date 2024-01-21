@@ -15,12 +15,17 @@ class PreviousSales extends Component
 
     public function mount()
     {
-        $this->coffeeSales = CoffeeSale::orderBy('created_at', 'desc')->get();
+        $this->coffeeSales = CoffeeSale::with(['coffeeType' => function ($query) {
+            $query->withTrashed();
+        }])->orderBy('created_at', 'desc')->get();
     }
 
     public function refreshSales()
     {
-        $this->coffeeSales = CoffeeSale::orderBy('created_at', 'desc')->get();
+        $this->coffeeSales = CoffeeSale::with(['coffeeType' => function ($query) {
+            $query->withTrashed();
+        }])->orderBy('created_at', 'desc')->get();
+        
         $this->dispatch('refreshComponent');
     }
 

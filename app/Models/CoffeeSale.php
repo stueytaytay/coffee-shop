@@ -14,5 +14,11 @@ class CoffeeSale extends Model
         'quantity',
         'unit_cost',
         'selling_price',
+        'coffee_type_id',
     ];
+
+    public function coffeeType()
+    {
+        return $this->belongsTo(CoffeeType::class);
+    }
 }

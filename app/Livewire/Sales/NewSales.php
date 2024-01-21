@@ -10,19 +10,26 @@ use App\Models\CoffeeType;
 
 class NewSales extends Component
 {
-    public $profitMargin = 0.25;
+    public $profitMargin;
     public $shippingCost = 10.00;
     public $cost;
     public $selling_price;
     public $formattedSellingPrice = '-';
-    public $selectedCoffeeType = null;
     public $coffeeTypes = [];
+
+    #[Validate('required|exists:coffee_types,id')]
+    public $selectedCoffeeType = null;
 
     #[Validate('required|integer|min:1')]
     public $quantity = '';
  
     #[Validate('required|numeric|min:0.01')]
     public $unit_cost = '';
+
+    public function mount()
+    {
+        $this->coffeeTypes = CoffeeType::all();
+    }
 
     public function updated($propertyName)
     {
@@ -34,22 +41,25 @@ class NewSales extends Component
 
     public function calculateSellingPrice()
     {
-        if (is_numeric($this->quantity) && is_numeric($this->unit_cost)) {
-            // Convert unit cost to the smallest unit (pence)
-            $unitCostPence = $this->unit_cost * 100;
+        if (is_numeric($this->quantity) && is_numeric($this->unit_cost) && $this->selectedCoffeeType) {
+            $coffeeType = CoffeeType::find($this->selectedCoffeeType);
+            if ($coffeeType) {
+                $this->profitMargin = $coffeeType->profit_margin;
 
-            // Calculate cost in pence
-            $cost = Money::GBP($unitCostPence)->multiply($this->quantity);
+                // Convert unit cost to the smallest unit (pence)
+                $unitCostPence = $this->unit_cost * 100;
 
-            // Calculate selling price
-            $profitFactor = 1 - $this->profitMargin;
-            $selling_price = $cost->divide($profitFactor)->add(Money::GBP($this->shippingCost * 100));
+                // Calculate cost in pence
+                $cost = Money::GBP($unitCostPence)->multiply($this->quantity);
 
-            // Format the selling price for display (includes currency symbol)
-            $this->formattedSellingPrice = $selling_price->format();
+                // Calculate selling price
+                $profitFactor = 1 - $this->profitMargin;
+                $selling_price = $cost->divide($profitFactor)->add(Money::GBP($this->shippingCost * 100));
 
-            // Format the selling price for storage
-            $this->selling_price = $selling_price->formatSimple();
+                // Format the selling price for display and storage
+                $this->formattedSellingPrice = $selling_price->format();
+                $this->selling_price = $selling_price->formatSimple();
+            }
         }
     }
 
@@ -58,7 +68,12 @@ class NewSales extends Component
         $this->validate();
 
         // Record the sale
-        CoffeeSale::create($this->all());
+        CoffeeSale::create([
+            'quantity' => $this->quantity,
+            'unit_cost' => $this->unit_cost,
+            'selling_price' => $this->selling_price,
+            'coffee_type_id' => $this->selectedCoffeeType,
+        ]);
 
         // Refresh the previous sales table
         $this->dispatch('saleRecorded');
@@ -67,7 +82,7 @@ class NewSales extends Component
         $this->formattedSellingPrice = '-';
 
         // Reset the form values
-        $this->reset();
+        $this->reset(['quantity', 'unit_cost', 'selectedCoffeeType', 'profitMargin', 'shippingCost', 'formattedSellingPrice']);
     }
 
 

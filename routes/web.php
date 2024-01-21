@@ -27,4 +27,8 @@ Route::get('/shipping-partners', function () {
     return view('shipping_partners');
 })->middleware(['auth'])->name('shipping.partners');
 
+Route::get('/coffee-types', function () {
+    return view('coffee-types');
+})->middleware(['auth'])->name('coffee.types');
+
 require __DIR__.'/auth.php';
