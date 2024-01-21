@@ -19,6 +19,9 @@ class DatabaseSeeder extends Seeder
             'email' => 'sales@coffee.shop',
         ]);
 
+        // Run shipping partners seeder before coffee types to generate IDs
+        $this->call(ShippingPartnersTableSeeder::class);
+
         // Run coffee types seeder before sales to generate IDs
         $this->call(CoffeeTypesTableSeeder::class);
 

@@ -3,12 +3,14 @@
 namespace App\Livewire\Settings;
 
 use Livewire\Component;
-use Livewire\Attributes\Validate;
 use App\Models\CoffeeType;
+use App\Models\ShippingPartner;
 
 class CoffeeTypes extends Component
 {
     public $coffeeTypes = [];
+    public $shippingPartners = [];
+    public $selectedShippingPartner = [];
     public $successMessage = '';
 
     public function mount()
@@ -18,11 +20,19 @@ class CoffeeTypes extends Component
             $type->profit_margin *= 100;
             return $type;
         })->toArray();
+
+        // Load the shipping partners
+        $this->shippingPartners = ShippingPartner::all();
+
+        // Get the selected shipping partners
+        foreach ($this->coffeeTypes as $index => $type) {
+            $this->selectedShippingPartner[$index] = $type['shipping_partner_id'] ?? null;
+        }
     }
 
     public function addCoffeeType()
     {
-        $this->coffeeTypes[] = ['coffee_name' => '', 'profit_margin' => ''];
+        $this->coffeeTypes[] = ['coffee_name' => '', 'profit_margin' => '', 'shipping_partner_id' => null];
 
         $this->successMessage = '';
     }
@@ -38,15 +48,18 @@ class CoffeeTypes extends Component
 
             $rules["coffeeTypes.$index.coffee_name"] = "required|string|min:1|$uniqueRule";
             $rules["coffeeTypes.$index.profit_margin"] = 'required|numeric|min:0.01';
+            $rules["selectedShippingPartner.$index"] = 'required|exists:shipping_partners,id';
         }
 
         $this->validate($rules);
 
-        foreach ($this->coffeeTypes as $index => $type) {
+        foreach ($this->coffeeTypes as $index => &$type) {
+            // Convert profit margin from percentage to decimal
             $this->coffeeTypes[$index]['profit_margin'] /= 100;
-        }
 
-        foreach ($this->coffeeTypes as $type) {
+            // Assign the selected shipping partner
+            $type['shipping_partner_id'] = $this->selectedShippingPartner[$index];
+
             if (isset($type['id'])) {
                 // Update existing coffee type
                 CoffeeType::find($type['id'])->update($type);
@@ -54,10 +67,8 @@ class CoffeeTypes extends Component
                 // Create new coffee type
                 CoffeeType::create($type);
             }
-        }
 
-        // Convert back to percentage after save otherwise it changes to decimal
-        foreach ($this->coffeeTypes as $index => $type) {
+            // Convert back to percentage after save otherwise it changes to decimal in the view
             $this->coffeeTypes[$index]['profit_margin'] *= 100;
         }
 
@@ -67,7 +78,7 @@ class CoffeeTypes extends Component
     public function deleteCoffeeType($index)
     {
         $this->successMessage = '';
-        
+
         // Find and delete the coffee type
         $coffeeTypeId = $this->coffeeTypes[$index]['id'] ?? null;
         if ($coffeeTypeId) {

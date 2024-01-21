@@ -20,6 +20,16 @@
                             <x-input type="text" id="profit_margin_{{ $index }}" wire:model="coffeeTypes.{{ $index }}.profit_margin" class="w-full" />
                             <x-input-error field="coffeeTypes.{{ $index }}.profit_margin" />
                         </div>
+                        <div class="w-52">
+                            <label for="shipping_partner_id_{{ $index }}" class="block font-semibold text-sm pb-1">Shipping Partner</label>
+                            <select wire:model="selectedShippingPartner.{{ $index }}" id="shipping_partner_id_{{ $index }}" class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 w-full">
+                                <option value="">Select...</option>
+                                @foreach($shippingPartners as $partner)
+                                    <option value="{{ $partner->id }}">{{ $partner->partner_name }}</option>
+                                @endforeach
+                            </select>
+                            <x-input-error field="selectedShippingPartner.{{ $index }}" />
+                        </div>
                         <button
                             type="button"
                             wire:click="deleteCoffeeType({{ $index }})"

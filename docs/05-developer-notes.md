@@ -32,6 +32,13 @@ Created a seeder class to add coffee types to the DB - this is called before the
 Also a factory class so the tests can run
 
 
+- Shipping partners
+
+I used the already existing route and view, then created a Livewire component, migration and seeder, then also set the CoffeeType relationship in the models
+
+Added validation to ensure a shipping partner is selected on the coffee type
+
+Added a column to previous sales showing the shipping information
 
 
 

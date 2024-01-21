@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use Livewire\Livewire;
 use App\Models\CoffeeType;
+use App\Models\ShippingPartner;
 use App\Livewire\Settings\CoffeeTypes;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -15,8 +16,18 @@ class CoffeeTypesTest extends TestCase
     /** @test */
     public function test_coffee_types_load_correctly()
     {
+        // Create a shipping partner
+        $shippingPartner = ShippingPartner::create([
+            'partner_name' => 'Royal Mail',
+            'shipping_cost' => 10,
+        ]);
+
         // Seed the database with a coffee type
-        CoffeeType::create(['coffee_name' => 'Arabic coffee', 'profit_margin' => 0.25]);
+        CoffeeType::create([
+            'coffee_name' => 'Arabic coffee',
+            'profit_margin' => 0.25,
+            'shipping_partner_id' => $shippingPartner->id,
+        ]);
 
         Livewire::test(CoffeeTypes::class)
             ->assertSet('coffeeTypes.0.coffee_name', 'Arabic coffee')
@@ -46,7 +57,18 @@ class CoffeeTypesTest extends TestCase
     /** @test */
     public function test_coffee_type_deletion()
     {
-        $coffeeType = CoffeeType::create(['coffee_name' => 'Latte', 'profit_margin' => 0.25]);
+        // Create a shipping partner
+        $shippingPartner = ShippingPartner::create([
+            'partner_name' => 'Royal Mail',
+            'shipping_cost' => 10,
+        ]);
+
+        // Seed the database with a coffee type
+        CoffeeType::create([
+            'coffee_name' => 'Arabic coffee',
+            'profit_margin' => 0.25,
+            'shipping_partner_id' => $shippingPartner->id,
+        ]);
 
         Livewire::test(CoffeeTypes::class)
             ->call('deleteCoffeeType', 0)

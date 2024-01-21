@@ -21,7 +21,13 @@ class NewSalesTest extends TestCase
     /** @test */
     public function new_sales_form_submission_with_valid_data()
     {
-        $coffeeType = \App\Models\CoffeeType::factory()->create();
+        // Create a shipping partner
+        $shippingPartner = \App\Models\ShippingPartner::factory()->create();
+
+        // Create a coffee type associated with the shipping partner
+        $coffeeType = \App\Models\CoffeeType::factory()->create([
+            'shipping_partner_id' => $shippingPartner->id,
+        ]);
 
         Livewire::test(NewSales::class)
             ->set('quantity', 10)
@@ -51,18 +57,24 @@ class NewSalesTest extends TestCase
 
     public function test_profit_margin_calculation()
     {
+        // Create a ShippingPartner
+        $shippingCost = 10.00;
+        $shippingPartner = \App\Models\ShippingPartner::factory()->create([
+            'shipping_cost' => $shippingCost,
+        ]);
+
         // Create a CoffeeType with a specific profit margin for predictable results
         $profitMargin = 0.25;
         $coffeeType = \App\Models\CoffeeType::factory()->create([
             'profit_margin' => $profitMargin,
+            'shipping_partner_id' => $shippingPartner->id,
         ]);
 
         $quantity = 1;
         $unitCost = 10.00;
-        $shippingCost = 10.00;
 
         // Calculate the expected selling price
-        $expectedSellingPrice = $this->calculateExpectedSellingPrice($quantity, $unitCost, $profitMargin, $shippingCost);
+        $expectedSellingPrice = $this->calculateExpectedSellingPrice($quantity, $unitCost, $profitMargin, $shippingPartner->shipping_cost);
 
         Livewire::test(NewSales::class)
             ->set('quantity', $quantity)
