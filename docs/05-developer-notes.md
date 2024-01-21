@@ -6,6 +6,10 @@ Updates phpunit.xml due to deprecated schema
 
 I opted to use Livewire for ease of implementation, front end reactivity and validation
 
+Added a confirmation message if the user tries to leave a settings (Coffee Types or Shipping Partners) page after making changes and not saving
+
+Added a basic "Load More" pagination
+
 - Sales
 
 New sales and previous sales are segmented into different Livewire components and blade templates
@@ -40,11 +44,11 @@ Added validation to ensure a shipping partner is selected on the coffee type
 
 Added a column to previous sales showing the shipping information
 
+Amended the tests to account for the new ShippingPartner
 
 
 Additional features I would implement in the future:
 
-- Add shipping rules/admin
 - OrderBy sales columns, sales search, filtering and better pagination - Livewire Tables (https://github.com/rappasoft/laravel-livewire-tables) would be ideal for this
 - Ability to edit sales
 - Improve UI & mobile responsive

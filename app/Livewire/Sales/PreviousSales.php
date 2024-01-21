@@ -9,27 +9,42 @@ class PreviousSales extends Component
 {
     public $coffeeSales;
 
+    public $perPage = 5;
+
+    public $currentPage = 1;
+
     protected $listeners = [
         'saleRecorded' => 'refreshSales',
     ];
 
     public function mount()
     {
-        $this->coffeeSales = CoffeeSale::with(['coffeeType' => function ($query) {
-            $query->withTrashed(); // Include soft-deleted CoffeeTypes
-        }, 'coffeeType.shippingPartner' => function ($query) {
-            $query->withTrashed(); // Include soft-deleted ShippingPartners
-        }])->orderBy('created_at', 'desc')->get();
+        $this->loadSales();
         
+    }
+
+    public function loadSales()
+    {
+        $this->coffeeSales = CoffeeSale::with(['coffeeType' => function ($query) {
+                $query->withTrashed();
+            }, 'coffeeType.shippingPartner' => function ($query) {
+                $query->withTrashed();
+            }])
+            ->orderBy('created_at', 'desc')
+            ->take($this->perPage * $this->currentPage) // Fetch items for the current page
+            ->get();
+    }
+
+    public function loadMore()
+    {
+        $this->currentPage++;
+        
+        $this->loadSales();
     }
 
     public function refreshSales()
     {
-        $this->coffeeSales = CoffeeSale::with(['coffeeType' => function ($query) {
-            $query->withTrashed(); // Include soft-deleted CoffeeTypes
-        }, 'coffeeType.shippingPartner' => function ($query) {
-            $query->withTrashed(); // Include soft-deleted ShippingPartners
-        }])->orderBy('created_at', 'desc')->get();        
+        $this->loadSales(); 
 
         $this->dispatch('refreshComponent');
     }
@@ -39,7 +54,8 @@ class PreviousSales extends Component
         $sale = CoffeeSale::find($saleId);
         if ($sale) {
             $sale->delete();
-            $this->coffeeSales = CoffeeSale::all();
+            
+            $this->loadSales(); 
         }
     }
 

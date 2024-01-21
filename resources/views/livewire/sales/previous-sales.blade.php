@@ -41,6 +41,13 @@
                     @endforeach
                 </tbody>
             </table>
+            @if($coffeeSales->count() >= $perPage)
+                <div class="text-center py-4">
+                    <button wire:click="loadMore" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full">
+                        Load More
+                    </button>
+                </div>
+            @endif
         @if (!$coffeeSales->count())
             <div class="text-center text-gray-500 font-semibold pt-6">
                 No sales logged...
