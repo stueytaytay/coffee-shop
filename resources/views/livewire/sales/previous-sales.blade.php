@@ -8,8 +8,8 @@
                         <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Coffee Type</th>
                         <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
                         <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Unit Cost</th>
-                        <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Selling Price</th>
                         <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Shipping</th>
+                        <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Selling Price</th>
                         <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
                         <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                     </tr>
@@ -21,11 +21,11 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm {{ $sale->coffeeType->trashed() ? 'text-gray-300' : 'text-gray-500' }} text-center">{{ $sale->coffeeType->coffee_name }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">{{ $sale->quantity }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">{{ Akaunting\Money\Money::GBP($sale->unit_cost * 100)->format() }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">{{ Akaunting\Money\Money::GBP($sale->selling_price * 100)->format() }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm {{ $sale->coffeeType->shippingPartner->trashed() ? 'text-gray-300' : 'text-gray-500' }} text-center">
                                 {{ $sale->coffeeType->shippingPartner->partner_name }},
                                 {{ Akaunting\Money\Money::GBP($sale->coffeeType->shippingPartner->shipping_cost * 100)->format() }}
                             </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">{{ Akaunting\Money\Money::GBP($sale->selling_price * 100)->format() }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">{{ $sale->created_at->format('d/m/Y H:i:s') }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                                 <button
